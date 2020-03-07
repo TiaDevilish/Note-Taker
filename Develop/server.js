@@ -10,22 +10,24 @@ app.use(express.json());
 app.use(express.static("public"));
 
 let count = 0;
-
+console.log('__dirname ' , __dirname)
 //routes
   app.get("/", function(req, res) {
-    res.sendFile(path.join(__dirname + "/public/index.html"));
+    res.sendFile(path.join(__dirname , "index.html"));
   });
   
   app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname + "/public/notes.html"));
+    console.log("__dirname ", __dirname);
+    res.sendFile(path.join(__dirname , "../public/index.html"));
   });
 
-  app.get("/notes", function(req, res){
-    res.sendFile(path.join(__dirname + "/public/assets/css/styles.css"))
-  });
+  // app.get("/notes", function(req, res){
+  //   res.sendFile(path.join(__dirname , "../public/assets/css/styles.css"))
+  // });
   
   app.get("/api/notes", function(req, res){
-    return res.json(notes);
+    console.log('test in api route')
+   // return res.json(notes);
   });
 
 //post
