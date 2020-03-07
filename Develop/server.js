@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-
+var note = [];
 
 //routes
   app.get("/", function(req, res) {
@@ -19,12 +19,17 @@ app.use(express.static("public"));
   app.get("/notes", function(req, res) {
     res.sendFile(path.join(__dirname , "./public/notes.html"));
   });
-  
-  app.get("/api/notes", function(req, res){
-   return res.json(notes);
-  });
 
 //post
+app.get("/api/notes", function(req, res){
+  return res.json(note);
+ });
+
+app.post("/api/notes", function(req, res){
+  var newNote = req.body;
+  note.push(newNote);
+  res.json(newNote);
+});
 
 //deletes
 
