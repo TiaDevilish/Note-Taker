@@ -11,31 +11,12 @@ app.use(express.json());
 
 
   app.get("/", function(req, res) {
-    res.sendFile(path.join(__dirname + "../../../index.html"));
+    res.sendFile(path.join(__dirname + "./../../index.html"));
   });
   
   app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname + "../../../notes.html"));
+    res.sendFile(path.join(__dirname + "./../../notes.html"));
   });
-
-  app.get("/api/allnotes", function(req, res){
-    fs.readFile("../../../db/db.json" , "utf8", function(err, data){
-      if(err) throw(err);
-      const notesFile = JSON.parse(data);
-      res.json(notesFile)
-    })
-  });
-
-  app.get("/api/allnotes/:id", function(req, res){
-    let selection = req.params.ID
-    console.log(selection);
-  });
-
-  app.get("*", function(req, res){
-    res.sendFile(path.join(__dirname, "../../../index.html"));
-  });
-
-
 
 
 
