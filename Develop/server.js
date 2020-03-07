@@ -7,7 +7,7 @@ const PORT = 7500;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(__dirname + "/public/assets/css/styles.css"));
+app.use(express.static("public"));
 
 let count = 0;
 
@@ -20,9 +20,9 @@ let count = 0;
     res.sendFile(path.join(__dirname + "/public/notes.html"));
   });
 
-  // app.get("/notes", function(req, res){
-  //   res.sendFile(path.join(__dirname + "/public/assets/css/styles.css"))
-  // })
+  app.get("/notes", function(req, res){
+    res.sendFile(path.join(__dirname + "/public/assets/css/styles.css"))
+  });
   
   app.get("/api/notes", function(req, res){
     return res.json(notes);
@@ -37,7 +37,7 @@ let count = 0;
     let id = count;
     notes.push(newNote);
     toStringAndWrite(notes);
-    res.join(notes);
+    //res.join(notes);
   })
 
 //deletes
