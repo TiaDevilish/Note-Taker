@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const db = require("./db/db.json");
 
 const app = express();
 const PORT = 7500;
@@ -10,6 +11,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 var note = [];
+
 
 //routes
   app.get("/", function(req, res) {
@@ -31,7 +33,15 @@ app.post("/api/notes", function(req, res){
   res.json(newNote);
 });
 
+let notesJson = JSON.stringify(note);
+
+//db
+fs.writeFile(path.join(__dirname, "db", "./db/db.json"), notesJson, function(err){
+  if (err) return console.log(err);
+})
+
 //deletes
+
 
 //listens
   app.listen(PORT, function() {
