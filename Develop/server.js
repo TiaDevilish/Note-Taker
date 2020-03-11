@@ -20,33 +20,46 @@ app.use(express.static("public"));
     res.sendFile(path.join(__dirname , "./public/notes.html"));
   });
 
+  app.get("/api/notes", function(req, res){
+    res.sendFile(path.join(__dirname,"/db/db.json"))
+  });
+
+  app.get("/api/notes/:id", function(req, res){
+    let savedNotes = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+    res.json(savedNotes[Number(req.params.id)]);
+  });
+
 //post
-app.get("/api/notes", function(req, res){
-  return res.json(db);
- });
+  app.post("/api/notes", function(req, res){
+    let savedNotes = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+    let newNote = req.body;
+    let uniqueId = (savedNotes.length).toString();
+    newNote.id = uniqueId;
+    savedNotes.push(newNote);
 
-app.post("/api/notes", function(req, res){
-  var newNote = req.body;
-  db.push(newNote);
-  const dbId = db.map(function(val, index){
-    val.id = index + 1;
-    return val;
-  })
-  fs.writeFile(path.join(__dirname, "./db/db.json"), notesJson, function(err){
-    if (err) return console.log(err);
-  })
-  res.json(newNote);
-});
-
-let notesJson = JSON.stringify(db);
-
+    fs.writeFileSync("./db/db.json", JSON.stringify(savedNotes));
+    console.log("Note saved to db", newNote);
+    res.json(savedNotes);
+  });
 
 //deletes
-app.delete("/api/notes/:id", function(req, res){
-  
-})
+  app.delete("/api/notes/:id", function(req, res){
+    let savedNotes = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+    let noteId = req.params.id;
+    let newId = 0;
+    console.log(`Deleting note with id ${noteId}`);
+    savedNotes = savedNotes.filter(currentNote => {
+      return currentNote.id != noteId;
+    })
 
+    for(currentNote of savedNotes) {
+      currentNote.id = newId.toString();
+      newId++;
+    }
 
+    fs.writeFileSync("./db/db.json", JSON.stringify(savedNotes));
+    res.json(savedNotes);
+  });
 
 //listens
   app.listen(PORT, function() {
